@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#define maxm 13
+#define maxm 33
 
 INT N, parity = 0;
 INT p[maxm];
@@ -28,9 +28,9 @@ VOID Go( INT pos )
 
   if (pos >= N)
   { 
-    l = q[0][p[0]];
-    for(j = 1; j < N; j++)
-      l = q[j][p[j]]* l;
+    l = 1;
+    for(j = 0; j < N; j++)
+      l = q[j][p[j]] * l;
     if (parity == 1)                                            
       det -= l;
     else 
