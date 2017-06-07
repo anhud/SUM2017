@@ -67,6 +67,47 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   return msg.wParam;
 }
 
+VOID FlipFullScreen( HWND hWnd )
+{
+  static BOOL IsFullScreen = FALSE;
+  static RECT SaveRect;
+
+  if (IsFullScreen)
+  {
+    /* restore window size */
+    SetWindowPos(hWnd, HWND_TOP,
+      SaveRect.left, SaveRect.top,
+      SaveRect.right - SaveRect.left, SaveRect.bottom - SaveRect.top,
+      SWP_NOOWNERZORDER);
+  }
+  else
+  {
+    /* Set full screen size to window */
+    HMONITOR hmon;
+    MONITORINFOEX moninfo;
+    RECT rc;
+
+    /* Store window old size */
+    GetWindowRect(hWnd, &SaveRect);
+
+    /* Get nearest monitor */
+    hmon = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
+
+    /* Obtain monitor info */
+    moninfo.cbSize = sizeof(moninfo);
+    GetMonitorInfo(hmon, (MONITORINFO *)&moninfo);
+
+    /* Set window new size */
+    rc = moninfo.rcMonitor;
+    AdjustWindowRect(&rc, GetWindowLong(hWnd, GWL_STYLE), FALSE);
+
+    SetWindowPos(hWnd, HWND_TOPMOST,
+      rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+      SWP_NOOWNERZORDER);
+  }
+  IsFullScreen = !IsFullScreen;
+}
+
 VOID DrawHand(HDC hMemDC, FLOAT t, FLOAT d, FLOAT ang, INT len, INT len2, INT w, INT h)
 {
   p[0].x = w / 2;
@@ -91,6 +132,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
   FLOAT sec, min, hou;
   PAINTSTRUCT ps;
   SYSTEMTIME st;
+  MINMAXINFO *MinMax;
   HFONT hFnt, hFntOld;
   CHAR txt[24] = "fsagdfas", day[4], s[3], m[3], hr[3];
   RECT rc;
@@ -109,6 +151,14 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     hBmXOR = LoadImage(NULL, "2.BMP", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
     SetTimer(hWnd, 413, 10, NULL);
+    return 0;
+  case WM_GETMINMAXINFO:
+    MinMax = (MINMAXINFO *)lParam;
+    MinMax->ptMaxTrackSize.y =
+      GetSystemMetrics(SM_CYMAXTRACK) +
+      GetSystemMetrics(SM_CYCAPTION) +
+      GetSystemMetrics(SM_CYMENU) +
+      GetSystemMetrics(SM_CYBORDER) * 2;
     return 0;
   case WM_SIZE:
     w = LOWORD(lParam);
@@ -199,7 +249,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     DrawText(hMemDC, txt, sprintf(txt, "%i.%i.%i %s", st.wDay, st.wMonth, st.wYear, day), &rc, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
     rc.bottom = h / 2 + 320;
     rc.top = h / 2 + 220;
-    DrawText(hMemDC, txt, sprintf(txt, "%i:%i:%s%i", st.wHour, st.wMinute, s, st.wSecond), &rc, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+    DrawText(hMemDC, txt, sprintf(txt, "%s%i:%s%i:%s%i", hr, st.wHour, m, st.wMinute, s, st.wSecond), &rc, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
     SelectObject(hMemDC, hFntOld);
     DeleteObject(hFnt);
 
@@ -212,6 +262,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
       DestroyWindow(hWnd);
       InvalidateRect(hWnd, NULL, FALSE);
     }
+    if (wParam == 'F')
+      FlipFullScreen(hWnd);
     return 0;
   case WM_DESTROY:
     DeleteObject(hBm);
