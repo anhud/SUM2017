@@ -8,15 +8,23 @@
 #include <stdio.h>
 #include <math.h>
 
-#define maxm 33
+#define MAXM 33
 
 INT N, parity = 0;
-INT p[maxm];
-DOUBLE q[maxm][maxm], det = 0;
+INT p[MAXM];
+DOUBLE Q[MAXM][MAXM], det = 0;
 
-VOID Swap( int *a, int*b )
+VOID Swap( INT *a, INT *b )
 {
   INT tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
+
+
+VOID SwapD( DOUBLE *a, DOUBLE *b )
+{
+  DOUBLE tmp = *a;
   *a = *b;
   *b = tmp;
 }
@@ -30,7 +38,7 @@ VOID Go( INT pos )
   { 
     l = 1;
     for(j = 0; j < N; j++)
-      l = q[j][p[j]] * l;
+      l = Q[j][p[j]] * l;
     if (parity == 1)                                            
       det -= l;
     else 
@@ -49,6 +57,57 @@ VOID Go( INT pos )
   }
 }
 
+
+DOUBLE Gs()
+{
+  INT i, j, ii, jj, k, max_i, max_j;
+  DOUBLE det1 = 1, coef;
+
+  for (i = 0; i < N; i++)
+  { 
+    max_i = i;
+    max_j = i;
+
+    for (ii = i; ii < N; ii++)
+    {
+      for (jj = i; jj < N; jj++)
+      {
+        if (fabs(Q[max_i][max_j]) < fabs(Q[ii][jj]))
+        {
+          max_i = ii;
+          max_j = jj;
+        }
+      }
+    }
+    if (fabs(Q[max_i][max_j]) < 1e-15)
+      return 0;
+
+    if (max_i != i)
+    {
+      det1 = -det1;
+      for (ii = i; ii < N; ii++)
+        SwapD(&Q[ii][i], &Q[ii][max_j]);
+    }
+
+    if (max_j != i)  
+    { 
+      det1 = -det1;
+      for (jj = i; jj < N; jj++)
+        SwapD(&Q[i][jj], &Q[max_i][jj]);
+    }
+
+    for (j = i + 1; j < N; j++)
+    {
+      coef = Q[j][i] / Q[i][i];
+      for (k = i; k < N; k++)
+        Q[j][k] -= Q[i][k] * coef;
+    }
+  }
+  for (i = 0; i < N; i++)
+    det1 *= Q[i][i];
+  return det1;
+}
+
 VOID main( void )
 {
   INT i, j;
@@ -58,17 +117,19 @@ VOID main( void )
   if (F == NULL)
     return;
   fscanf(F, "%d", &N);
-  for(i = 0; i < N; i++)
+  for (i = 0; i < N; i++)
   {  
     p[i] = i;
-    for(j = 0; j < N; j++)
-      fscanf(F, "%lf", &q[i][j]);
+    for (j = 0; j < N; j++)
+      fscanf(F, "%lf", &Q[i][j]);
   }
   fclose(F);
   Go(0);
-  F = fopen("MTRX.txt", "a");
+  F = fopen("MTRXOUT.txt", "a");
   if (F == NULL)
     return;
+  fprintf(F, "\n%lf", det);
+  det = Gs();
   fprintf(F, "\n%lf", det);
   fclose(F);
 }
