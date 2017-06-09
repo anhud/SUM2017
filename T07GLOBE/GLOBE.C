@@ -15,8 +15,9 @@
 
 VOID DrawSphere( HDC hMemDC, INT w, INT h )
 {
-  DBL size = 1, wp = size, hp = size, xp, yp, t = clock() / (DBL)CLOCKS_PER_SEC;
-  INT i, j;
+  DBL size = 1, wp = size, hp = size, xp, yp, t = clock() * 50 / (DBL)CLOCKS_PER_SEC;
+  INT i, j, i1, j1;
+  VEC RT = {2, -3, 0.5};
 
   if (w < h)
     hp *= (DBL)h / w;
@@ -26,25 +27,30 @@ VOID DrawSphere( HDC hMemDC, INT w, INT h )
   for (i = 0; i < GRID_H; i++)
     for (j = 0; j < GRID_W; j++)
     {
-      xp = G[i][j].X * sin(t) - G[i][j].Y * cos(t);
-      yp = G[i][j].X * cos(t) + G[i][j].Y * sin(t);
+      G[i][j] = VecTransform(G[i][j], (MatrRotate(t, RT)));
+      xp = G[i][j].X;
+      yp = G[i][j].Y;
 
       Pts[i][j].x = xp * w / wp + w / 2;
       Pts[i][j].y = h / 2 - yp * h / hp;
     }
 
-  /*points*/
-  for(i = 0; i < GRID_H; i++)
-    for (j = 0; j < GRID_W; j++)
-    {
-      Ellipse(hMemDC, Pts[i][j].x - 2, Pts[i][j].y - 2, Pts[i][j].x + 2, Pts[i][j].y + 2);
-    }
-
  for(i = 0; i < GRID_H; i++)
-  {
-    MoveToEx(hMemDC, Pts[i][0].x, Pts[i][0].y, NULL);
-    LineTo(hMemDC, Pts[i][1].x, Pts[i][1].y);
-  }
+   for(j = 0; j < GRID_W; j++)
+   {
+     i1 = i + 1;
+     if ((GRID_W - j) != 1)
+       j1 = j + 1;
+     else
+       j1 = 0;
+     if(((Pts[i][j].x - Pts[i][j1].x) * (Pts[i][j].y + Pts[i][j1].y) + (Pts[i][j1].x - Pts[i1][j1].x) * (Pts[i][j1].y + Pts[i1][j1].y) + (Pts[i1][j1].x - Pts[i1][j].x) * (Pts[i1][j1].y + Pts[i1][j].y) + (Pts[i1][j].x - Pts[i][j].x) * (Pts[i1][j].y + Pts[i][j].y)) >= 0)
+     {  
+       MoveToEx(hMemDC, Pts[i][j].x, Pts[i][j].y, NULL);
+       LineTo(hMemDC, Pts[i][j1].x, Pts[i][j1].y);
+       MoveToEx(hMemDC, Pts[i][j].x, Pts[i][j].y, NULL);
+       LineTo(hMemDC, Pts[i1][j].x, Pts[i1][j].y);
+     }
+   }
 }
 
 VOID BuildSphere( DBL R )
@@ -55,13 +61,13 @@ VOID BuildSphere( DBL R )
   for(theta = 0, i = 0; i < GRID_H; i++ , theta += pi / (GRID_H - 1))
     for(phi = 0, j = 0; j < GRID_W; j++, phi += 2 * pi / GRID_W)
     {
-      x = R * sin(theta) * sin(phi);
-      y = R * cos(theta);
-      z = R * sin(theta) * cos(phi);
+      x = (R * sin(theta) * sin(phi));
+      y = (R * cos(theta));
+      z = (R * sin(theta) * cos(phi));
 
-      G[i][j].X = x;
-      G[i][j].Y = y;
-      G[i][j].Z = z;
+      G[i][j].X = x ;
+      G[i][j].Y = y ;
+      G[i][j].Z = z ;
     }
 }
 

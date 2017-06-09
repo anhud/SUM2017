@@ -6,9 +6,9 @@
 
 #include <windows.h>
 
-#define GRID_W 50
-#define GRID_H 100
-#define pi 3.14159265358979
+#define GRID_W 60
+#define GRID_H 30
+#define pi 3.14159265358979323846
 
 typedef double DBL;
 typedef struct tagVEC
@@ -25,3 +25,5 @@ static POINT Pts[GRID_H][GRID_W];
 
 VOID DrawSphere( HDC hMemDC, INT w, INT h );
 VOID BuildSphere( DBL R );
+MATR MatrRotate( DBL AngleInDegree, VEC R );
+VEC VecTransform( VEC V, MATR M );
