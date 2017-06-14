@@ -136,8 +136,8 @@ __inline MATR MatrRotateX( DBL AngleInDegree )
 
   r.M[1][1] = cos(AngleInDegree);
   r.M[1][2] = sin(AngleInDegree);
-  r.M[2][1] = -sin(AngleInDegree);
-  r.M[2][2] = cos(AngleInDegree);
+  r.M[2][1] = -r.M[1][2];
+  r.M[2][2] = r.M[1][1];
 
   return r;
 }
@@ -147,8 +147,8 @@ __inline MATR MatrRotateY( DBL AngleInDegree )
 
   r.M[0][0] = cos(AngleInDegree);
   r.M[2][0] = sin(AngleInDegree);
-  r.M[0][2] = -sin(AngleInDegree);
-  r.M[2][2] = cos(AngleInDegree);
+  r.M[0][2] = -r.M[2][0];
+  r.M[2][2] = r.M[0][0];
 
   return r;
 }
@@ -158,8 +158,8 @@ __inline MATR MatrRotateZ( DBL AngleInDegree )
 
   r.M[0][0] = cos(AngleInDegree);
   r.M[0][1] = sin(AngleInDegree);
-  r.M[1][0] = -sin(AngleInDegree);
-  r.M[1][1] = cos(AngleInDegree);
+  r.M[1][0] = -r.M[0][1];
+  r.M[1][1] = r.M[0][0];
 
   return r;
 }
