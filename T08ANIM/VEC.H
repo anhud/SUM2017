@@ -1,8 +1,11 @@
-/* FILE NAME: GLOBE.H
+/* FILE NAME: VEC.H
  * PROGRAMMER: AH5
  * DATE: 07.06.2017
  * PURPOSE: blblblblblblblblbl
  */
+
+#ifndef __VEC_H
+#define __VEC_H
 
 #include <math.h>
 
@@ -40,6 +43,16 @@ __inline VEC VecSet( DBL X, DBL Y, DBL Z )
   v.X = X;
   v.Y = Y;
   v.Z = Z;
+  return v;
+}
+
+__inline VEC VecSet1( DBL X )
+{
+  VEC v;
+
+  v.X = X;
+  v.Y = X;
+  v.Z = X;
   return v;
 }
 
@@ -252,3 +265,50 @@ __inline VEC PointTransform( VEC V, MATR M )
                 (V.X * M.M[0][1] + V.Y * M.M[1][1] + V.Z * M.M[2][1] + M.M[3][1]) / w,
                 (V.X * M.M[0][2] + V.Y * M.M[1][2] + V.Z * M.M[2][2] + M.M[3][2]) / w);
 }
+
+__inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
+{
+  VEC
+    Dir = VecNormalize(VecSubVec(At, Loc)),
+    Right = VecNormalize(VecCrossVec(Dir, Up1)),
+    Up = VecNormalize(VecCrossVec(Right, Dir));
+  MATR m =
+  {
+    {
+      {               Right.X,                Up.X,              -Dir.X, 0},
+      {               Right.Y,                Up.Y,              -Dir.Y, 0},
+      {               Right.Z,                Up.Z,              -Dir.Z, 0},
+      {-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1}
+    }
+  };
+
+  return m;
+}
+
+__inline MATR MatrFrustum( DBL l, DBL r, DBL b, DBL t, DBL n, DBL f )
+{
+  MATR m;
+
+  m.M[0][0] = (2 * n) / (r - l);
+  m.M[0][1] = 0;
+  m.M[0][2] = 0;
+  m.M[0][3] = 0;
+
+  m.M[1][0] = 0;
+  m.M[1][1] = (2 * n) / (t - b);
+  m.M[1][2] = 0;
+  m.M[1][3] = 0;
+
+  m.M[2][0] = (r + l) / (r - l);
+  m.M[2][1] = (t + b) / (t - b);
+  m.M[2][2] = -(f + n) / (f - n);
+  m.M[2][3] = -1;
+
+  m.M[3][0] = 0;
+  m.M[3][1] = 0;
+  m.M[3][2] = -(2 * n * f) / (f - n);
+  m.M[3][3] = 0;
+
+  return m;
+}
+#endif
