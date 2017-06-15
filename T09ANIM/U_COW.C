@@ -14,7 +14,7 @@
 typedef struct tagUNIT_COW
 {
   AH5_UNIT_BASE_FIELDS;
-  ah5OBJ3D Cow; /* Cow model */
+  ah5PRIM Cow; /* Cow model */
 } ah5UNIT_COW;
 
 /* Cow drawing unit initialization function.
@@ -27,7 +27,7 @@ typedef struct tagUNIT_COW
  */
 static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
 {
-  AH5_RndObjLoad(&Uni->Cow, "cow.object");
+  AH5_RndPrimLoad(&Uni->Cow, "cow.object");
 } /* End of 'AH5_UnitInit' function */
 
 /* Cow drawing unit deinitialization function.
@@ -40,7 +40,7 @@ static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  */
 static VOID AH5_UnitClose( ah5UNIT_COW *Uni, ah5ANIM *Ani )
 {
-  AH5_RndObjFree(&Uni->Cow);
+  AH5_RndPrimFree(&Uni->Cow);
 } /* End of 'AH5_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.
@@ -65,7 +65,7 @@ static VOID AH5_UnitResponse( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  */
 static VOID AH5_UnitRender( ah5UNIT_COW *Uni, ah5ANIM *Ani )
 {
-  AH5_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrRotateY(AH5_Anim.Mx / 300.0), MatrRotateX(AH5_Anim.My / 300.0)));
+  AH5_RndPrimDraw(&Uni->Cow, MatrMulMatr(MatrRotateY(AH5_Anim.Mx / 300.0), MatrRotateX(AH5_Anim.My / 300.0)));
 } /* End of 'AH5_UnitRender' function */
 
 /* Cow drawing unit creation function.

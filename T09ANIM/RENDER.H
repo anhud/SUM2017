@@ -21,7 +21,11 @@ extern DBL
 
 extern MATR
   AH5_RndMatrView,
-  AH5_RndMatrProj; 
+  AH5_RndMatrProj;
+
+/* Current shader */
+ extern UINT
+  AH5_RndProgId;    /* Shader program identifier */
 
 /* Rendering system initialization function.
  * ARGUMENTS: None.
@@ -40,42 +44,84 @@ VOID AH5_RndSetProj( VOID );
  ***/
 
 /* Object description type */
-typedef struct tagah5OBJ3D
+typedef struct tagah5PRIM
 {
-  VEC *V;      /* Vertex array */
-  INT NumOfV;  /* Vertex array size */
-  INT (*F)[3]; /* Facets array (point indices) */
-  INT NumOfF;  /* Facets array size */
-} ah5OBJ3D;
+  INT NumOfI;
+  INT VA, VBuf;
+  INT IBuf;
+  BOOL IsTrimesh;
+  MATR M;
+} ah5PRIM;
+typedef struct tagah5VERTEX
+{
+  VEC P;
+  VEC2 T;
+  VEC N;
+  VEC4 C;
+} ah5VERTEX;
+typedef struct tagah5OBJ
+{
+  ah5PRIM *P;
+  INT NumOfP;
+} ah5OBJ;
 
 /* Object free memory function.
  * ARGUMENTS:
  *   - object pointer:
- *       ah5OBJ3D *Obj;
+ *       ah5OBJ *Obj;
  *   - model *.OBJ file name:
  *       CHAR *FileName;
  * RETURNS:
  *   (BOOL) TRUE if success, FALSE otherwise.
  */
-BOOL AH5_RndObjLoad( ah5OBJ3D *Obj, CHAR *FileName );
+BOOL AH5_RndObjLoad( ah5OBJ *Obj, CHAR *FileName );
 
 /* Object free memory function.
  * ARGUMENTS:
  *   - object pointer:
- *       ah5OBJ3D *Obj;
+ *       ah5OBJ *Obj;
  * RETURNS: None.
  */
-VOID AH5_RndObjFree( ah5OBJ3D *Obj );
+VOID AH5_RndObjFree( ah5OBJ *Obj );
 
 /* Object drawing function.
  * ARGUMENTS:
  *   - object pointer:
- *       ah5OBJ3D *Obj;
+ *       ah5OBJ *Obj;
  *   - world coordinate system transform matrix:
  *       MATR M;
  * RETURNS: None.
  */
-VOID AH5_RndObjDraw( ah5OBJ3D *Obj, MATR M );
+
+VOID AH5_RndObjCreate( ah5OBJ *Obj, INT NumOfP );
+
+VOID AH5_RndObjDraw( ah5OBJ *Obj, MATR M );
+
+VOID AH5_RndPrimCreate( ah5PRIM *Pr, BOOL IsTrimesh, ah5VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
+
+VOID AH5_RndPrimFree( ah5PRIM *Pr );
+
+VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M );
+
+BOOL AH5_RndPrimLoad( ah5PRIM *Obj, CHAR *FileName );
+
+VOID AH5_RndTriMeshEvalNormals( ah5VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
+
+VOID AH5_RndGridEvalNormals( ah5VERTEX *V, INT N, INT M );
+
+VOID AH5_RndPrimCreateSphere( ah5PRIM *Pr, VEC C, FLT R, INT N, INT M );
+
+VOID AH5_RndPrimCreatePlane( ah5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
+
+/* CHAR * AH5_RndShaderLoadTextFile( CHAR *FileName );
+
+VOID AH5_RndShaderLog( CHAR *Stage, CHAR *Text );  */
+
+VOID AH5_RndShaderFree( UINT Prg );
+
+UINT AH5_RndShaderLoad( CHAR *FileNamePrefix );
+
+
 
 #endif /* __RENDER_H_ */
 

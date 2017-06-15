@@ -21,6 +21,14 @@ typedef struct tagVEC
 {
   DBL X, Y, Z;
 } VEC;
+typedef struct tagVEC2
+{
+  DBL X, Y;
+} VEC2;
+typedef struct tagVEC4
+{
+  DBL X, Y, Z, W;
+} VEC4;
 typedef struct tagMATR
 {
   DBL M[4][4];
@@ -53,6 +61,26 @@ __inline VEC VecSet1( DBL X )
   v.X = X;
   v.Y = X;
   v.Z = X;
+  return v;
+}
+
+__inline VEC4 Vec4Set( DBL X, DBL Y, DBL Z, DBL W )
+{
+  VEC4 v;
+
+  v.X = X;
+  v.Y = Y;
+  v.Z = Z;
+  v.W = W;
+  return v;
+}
+
+__inline VEC2 Vec2Set( DBL X, DBL Y )
+{
+  VEC2 v;
+
+  v.X = X;
+  v.Y = Y;
   return v;
 }
 
@@ -161,6 +189,21 @@ __inline MATR MatrRotateZ( DBL AngleInDegree )
   r.M[1][0] = -r.M[0][1];
   r.M[1][1] = r.M[0][0];
 
+  return r;
+}
+__inline MATR MatrMulMatr3( MATR M1, MATR M2, MATR M3 )
+{
+  MATR r, r1;
+  INT i, j, k;
+
+  for (i = 0; i < 4; i++)
+    for (j = 0; j < 4; j++)
+      for (r.M[i][j] = 0, k = 0; k < 4; k++)
+        r.M[i][j] += M1.M[i][k] * M2.M[k][j];
+  for (i = 0; i < 4; i++)
+    for (j = 0; j < 4; j++)
+       for (r1.M[i][j] = 0, k = 0; k < 4; k++)
+       r1.M[i][j] += r.M[i][k] * M3.M[k][j];
   return r;
 }
 __inline MATR MatrMulMatr( MATR M1, MATR M2 )

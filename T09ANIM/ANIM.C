@@ -59,7 +59,7 @@ VOID AH5_AnimInit( HWND hWnd )
     ReleaseDC(AH5_Anim.hWnd, AH5_Anim.hDC);
     exit(0);
   }
-
+  AH5_RndProgId = AH5_RndShaderLoad("A");
   AH5_RndInit();
 
   QueryPerformanceFrequency(&t);
@@ -77,6 +77,7 @@ VOID AH5_AnimClose( VOID )
 {
   INT i;
 
+  AH5_RndShaderFree(AH5_RndProgId);
   for(i = 0; i < AH5_Anim.NumOfUnits; i++)
   {
     AH5_Anim.Units[i]->Close(AH5_Anim.Units[i], &AH5_Anim);
@@ -113,6 +114,7 @@ VOID AH5_AnimRender( VOID )
   INT i;
   LARGE_INTEGER t;
   POINT pt;
+  static DBL ShdTime;
 
   /*** Handle timer ***/
   AH5_FrameCounter++;
@@ -197,6 +199,14 @@ VOID AH5_AnimRender( VOID )
     AH5_Anim.Units[i]->Response(AH5_Anim.Units[i], &AH5_Anim);
   
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    /*** Update shader ***/
+  if (AH5_Anim.GlobalTime - ShdTime > 2)
+  {
+    AH5_RndShaderFree(AH5_RndProgId);
+    AH5_RndProgId = AH5_RndShaderLoad("A");
+    ShdTime = AH5_Anim.GlobalTime;
+  }
 
   for (i = 0; i < AH5_Anim.NumOfUnits; i++)
   {

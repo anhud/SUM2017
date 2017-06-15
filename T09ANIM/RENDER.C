@@ -20,6 +20,10 @@ MATR
   AH5_RndMatrView, /* Viewer matrix */
   AH5_RndMatrProj;
 
+/* Current shader */
+UINT
+  AH5_RndProgId;    /* Shader program identifier */
+
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.
