@@ -16,6 +16,7 @@ typedef struct tagUNIT_CONTROL
   AH5_UNIT_BASE_FIELDS;
 } ah5UNIT_CONTROL;
 
+DBL px = 0, py = 0, pz = 0, rt = PI / 2;
 /* Control unit initialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
@@ -56,6 +57,14 @@ static VOID AH5_UnitResponse( ah5UNIT_CONTROL *Uni, ah5ANIM *Ani )
     AH5_AnimFlipFullScreen();
   else if (Ani->KeysClick['P'])
     AH5_Anim.IsPause = !AH5_Anim.IsPause;
+  else if (Ani->Jy != 0)
+  {
+    px += Ani->Jy * cos(rt);
+    pz += Ani->Jy * sin(rt);
+    rt += Ani->Jr / 5;
+  }
+
+    AH5_RndMatrView = MatrView(VecSet(px, AH5_Anim.Mz / 60.0, pz), VecSet1(0), VecSet(px + cos(rt), 1, pz + sin(rt)));
 } /* End of 'AH5_UnitResponse' function */
 
 /* Control unit render function.

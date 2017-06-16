@@ -16,5 +16,7 @@
  */
 ah5UNIT *AH5_UnitCreateCow( VOID );
 ah5UNIT *AH5_UnitCreateControl( VOID );
+ah5UNIT *AH5_UnitCreateOwl( VOID );
+ah5UNIT *AH5_UnitCreatePlain( VOID );
 
 #endif

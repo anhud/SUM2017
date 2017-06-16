@@ -11,11 +11,11 @@
 #include "units.h"
 
 /* Animation unit representation type */
-typedef struct tagUNIT_COW
+typedef struct tagUNIT_OWL
 {
   AH5_UNIT_BASE_FIELDS;
-  ah5PRIM Cow; /* Cow model */
-} ah5UNIT_COW;
+  ah5PRIM Owl; /* Cow model */
+} ah5UNIT_OWL;
 
 /* Cow drawing unit initialization function.
  * ARGUMENTS:
@@ -25,9 +25,9 @@ typedef struct tagUNIT_COW
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitInit( ah5UNIT_OWL *Uni, ah5ANIM *Ani )
 {
-  AH5_RndPrimLoad(&Uni->Cow, "cow.object");
+  AH5_RndPrimLoad(&Uni->Owl, "s.object");
 } /* End of 'AH5_UnitInit' function */
 
 /* Cow drawing unit deinitialization function.
@@ -38,9 +38,9 @@ static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitClose( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitClose( ah5UNIT_OWL *Uni, ah5ANIM *Ani )
 {
-  AH5_RndPrimFree(&Uni->Cow);
+  AH5_RndPrimFree(&Uni->Owl);
 } /* End of 'AH5_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.
@@ -51,12 +51,8 @@ static VOID AH5_UnitClose( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitResponse( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitResponse( ah5UNIT_OWL *Uni, ah5ANIM *Ani )
 {
-  if (Ani->KeysClick['W'])
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  else if (Ani->KeysClick['Q'])
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 } /* End of 'AH5_UnitResponse' function */
 
 /* Cow drawing unit render function.
@@ -67,9 +63,9 @@ static VOID AH5_UnitResponse( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitRender( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitRender( ah5UNIT_OWL *Uni, ah5ANIM *Ani )
 {
-  AH5_RndPrimDraw(&Uni->Cow, MatrMulMatr(MatrMulMatr(MatrRotateY(AH5_Anim.GlobalTime / 5.0), MatrRotateZ(fabs(cos(AH5_Anim.GlobalTime)))), MatrTranslate(VecSet(-30, 0, -10))));
+  AH5_RndPrimDraw(&Uni->Owl, MatrMulMatr(MatrMulMatr(UnitMatrix, MatrTranslate(VecSet(sin(AH5_Anim.GlobalTime) * 10, (cos(AH5_Anim.GlobalTime) + 1) * 5, 0))), MatrRotateY((cos(AH5_Anim.GlobalTime) + 1) * 5)));
 } /* End of 'AH5_UnitRender' function */
 
 /* Cow drawing unit creation function.
@@ -77,12 +73,12 @@ static VOID AH5_UnitRender( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  * RETURNS:
  *   (ah5UNIT *) pointer to created unit.
  */
-ah5UNIT * AH5_UnitCreateCow( VOID )
+ah5UNIT * AH5_UnitCreateOwl( VOID )
 {
-  ah5UNIT_COW *Uni;
+  ah5UNIT_OWL *Uni;
 
   /* Memory allocation */
-  if ((Uni = (ah5UNIT_COW *)AH5_AnimUnitCreate(sizeof(ah5UNIT_COW))) == NULL)
+  if ((Uni = (ah5UNIT_OWL *)AH5_AnimUnitCreate(sizeof(ah5UNIT_OWL))) == NULL)
     return NULL;
   /* Setup unit methods */
   Uni->Init = (VOID *)AH5_UnitInit;
@@ -90,6 +86,6 @@ ah5UNIT * AH5_UnitCreateCow( VOID )
   Uni->Response = (VOID *)AH5_UnitResponse;
   Uni->Render = (VOID *)AH5_UnitRender;
   return (ah5UNIT *)Uni;
-} /* End of 'AH5_UnitCreateCow' function */
+} /* End of 'AH5_UnitCreate not a cow' function */
 
 /* END OF 'U_COW.C' FILE */

@@ -38,9 +38,9 @@ VOID AH5_RndInit( VOID )
   AH5_RndProjDist = 1;
   AH5_RndProjSize = 1;
 
-  AH5_RndMatrView = MatrView(VecSet1(23), VecSet1(0), VecSet(0, 1, 0));
+  AH5_RndMatrView = MatrView(VecSet(20, AH5_Anim.Mz / 60.0, 20), VecSet1(0), VecSet(0, 1, 0));
 
-  AH5_RndLightPos = VecSet(7, 7, 0);
+  AH5_RndLightPos = VecSet(2, -17, 2);
   AH5_RndLightColor = VecSet(0.85, 1, 0.87);
 
   glEnable(GL_DEPTH_TEST);

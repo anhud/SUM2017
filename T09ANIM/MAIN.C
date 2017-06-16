@@ -63,7 +63,9 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   /* AH5_AnimAddUnit(AH5_UnitCreateBall());   */
   AH5_AnimAddUnit(AH5_UnitCreateControl());
   AH5_AnimAddUnit(AH5_UnitCreateCow());
-  
+  AH5_AnimAddUnit(AH5_UnitCreateOwl());
+  AH5_AnimAddUnit(AH5_UnitCreatePlain());
+
   while (GetMessage(&msg, NULL, 0, 0))
   {
     TranslateMessage(&msg);
