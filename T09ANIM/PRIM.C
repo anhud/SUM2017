@@ -109,7 +109,7 @@ VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M )
 
   W = MatrMulMatr(Pr->M, M);
   WVP = MatrMulMatr3(W, AH5_RndMatrView, AH5_RndMatrProj);
-  glLoadMatrixd(WVP.M[0]);
+  glLoadMatrixf(WVP.M[0]);
 
   glBindVertexArray(Pr->VA);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Pr->IBuf);
@@ -120,10 +120,22 @@ VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M )
   glUseProgram(AH5_RndProgId);
   loc = glGetUniformLocation(AH5_RndProgId, "MatrWVP");
   if (loc != -1)
-    glUniformMatrix4dv(loc, 1, FALSE, WVP.M[0]);
+    glUniformMatrix4fv(loc, 1, FALSE, WVP.M[0]);
   loc = glGetUniformLocation(AH5_RndProgId, "MatrW");
   if (loc != -1)
-    glUniformMatrix4dv(loc, 1, FALSE, W.M[0]);
+    glUniformMatrix4fv(loc, 1, FALSE, W.M[0]);
+
+  loc = glGetUniformLocation(AH5_RndProgId, "MatrV");
+  if (loc != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, AH5_RndMatrView.M[0]);
+
+  loc = glGetUniformLocation(AH5_RndProgId, "LightPos");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &AH5_RndLightPos.X);
+  loc = glGetUniformLocation(AH5_RndProgId, "LightColor");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &AH5_RndLightColor.X);
+
   loc = glGetUniformLocation(AH5_RndProgId, "Time");
   if (loc != -1)
     glUniform1f(loc, AH5_Anim.Time);

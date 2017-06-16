@@ -23,6 +23,10 @@ extern MATR
   AH5_RndMatrView,
   AH5_RndMatrProj;
 
+ extern VEC
+  AH5_RndLightPos,
+  AH5_RndLightColor;
+
 /* Current shader */
  extern UINT
   AH5_RndProgId;    /* Shader program identifier */

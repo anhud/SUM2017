@@ -197,7 +197,7 @@ VOID AH5_AnimRender( VOID )
 
   for (i = 0; i < AH5_Anim.NumOfUnits; i++)
     AH5_Anim.Units[i]->Response(AH5_Anim.Units[i], &AH5_Anim);
-  
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /*** Update shader ***/

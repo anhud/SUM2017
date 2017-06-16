@@ -20,6 +20,10 @@ MATR
   AH5_RndMatrView, /* Viewer matrix */
   AH5_RndMatrProj;
 
+VEC
+  AH5_RndLightPos,
+  AH5_RndLightColor;
+
 /* Current shader */
 UINT
   AH5_RndProgId;    /* Shader program identifier */
@@ -35,6 +39,9 @@ VOID AH5_RndInit( VOID )
   AH5_RndProjSize = 1;
 
   AH5_RndMatrView = MatrView(VecSet1(23), VecSet1(0), VecSet(0, 1, 0));
+
+  AH5_RndLightPos = VecSet(7, 7, 0);
+  AH5_RndLightColor = VecSet(0.85, 1, 0.87);
 
   glEnable(GL_DEPTH_TEST);
   glClearColor(0.1, 0.1, 0.2, 1);

@@ -19,19 +19,19 @@ typedef double DBL;
 typedef float FLT;
 typedef struct tagVEC
 {
-  DBL X, Y, Z;
+  FLT X, Y, Z;
 } VEC;
 typedef struct tagVEC2
 {
-  DBL X, Y;
+  FLT X, Y;
 } VEC2;
 typedef struct tagVEC4
 {
-  DBL X, Y, Z, W;
+  FLT X, Y, Z, W;
 } VEC4;
 typedef struct tagMATR
 {
-  DBL M[4][4];
+  FLT M[4][4];
 } MATR;
 
 static MATR UnitMatrix =
@@ -204,7 +204,7 @@ __inline MATR MatrMulMatr3( MATR M1, MATR M2, MATR M3 )
     for (j = 0; j < 4; j++)
        for (r1.M[i][j] = 0, k = 0; k < 4; k++)
        r1.M[i][j] += r.M[i][k] * M3.M[k][j];
-  return r;
+  return r1;
 }
 __inline MATR MatrMulMatr( MATR M1, MATR M2 )
 {
