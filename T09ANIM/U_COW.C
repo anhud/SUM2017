@@ -14,7 +14,7 @@
 typedef struct tagUNIT_COW
 {
   AH5_UNIT_BASE_FIELDS;
-  ah5PRIM Cow; /* Cow model */
+  ah5OBJ Cow; /* Cow model */
 } ah5UNIT_COW;
 
 /* Cow drawing unit initialization function.
@@ -27,7 +27,7 @@ typedef struct tagUNIT_COW
  */
 static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
 {
-  AH5_RndPrimLoad(&Uni->Cow, "cow.object");
+  AH5_RndObjLoad(&Uni->Cow, "cow.g3dm");
 } /* End of 'AH5_UnitInit' function */
 
 /* Cow drawing unit deinitialization function.
@@ -40,7 +40,7 @@ static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  */
 static VOID AH5_UnitClose( ah5UNIT_COW *Uni, ah5ANIM *Ani )
 {
-  AH5_RndPrimFree(&Uni->Cow);
+  AH5_RndObjFree(&Uni->Cow);
 } /* End of 'AH5_UnitClose' function */
 
 /* Cow drawing unit inter frame events handle function.

@@ -24,8 +24,11 @@
  *       INT NumOfI;
  * RETURNS: None.
  */
-VOID AH5_RndPrimCreate( ah5PRIM *Pr, BOOL IsTrimesh, ah5VERTEX *V, INT NumOfV, INT *I, INT NumOfI )
+VOID AH5_RndPrimCreate( ah5PRIM *Pr, BOOL IsTrimesh,
+                        ah5VERTEX *V, INT NumOfV,
+                        INT *I, INT NumOfI )
 {
+  memset(Pr, 0, sizeof(ah5PRIM));
   Pr->NumOfI = NumOfI;
   Pr->IsTrimesh = IsTrimesh;
   Pr->M = MatrIdentity();
@@ -104,7 +107,7 @@ VOID AH5_RndPrimFree( ah5PRIM *Pr )
  */
 VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M )
 {
-  INT loc;
+  INT loc, prg;
   MATR W, WVP;
 
   W = MatrMulMatr(Pr->M, M);
@@ -117,29 +120,29 @@ VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M )
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(-1);
 
-  glUseProgram(AH5_RndProgId);
-  loc = glGetUniformLocation(AH5_RndProgId, "MatrWVP");
+  prg = AH5_RndMaterialApply(Pr->MtlNo);
+  /// glUseProgram(AH5_RndProgId);
+  loc = glGetUniformLocation(prg, "MatrWVP");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, WVP.M[0]);
-  loc = glGetUniformLocation(AH5_RndProgId, "MatrW");
+  loc = glGetUniformLocation(prg, "MatrW");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, W.M[0]);
-
-  loc = glGetUniformLocation(AH5_RndProgId, "MatrV");
+  loc = glGetUniformLocation(prg, "MatrV");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, AH5_RndMatrView.M[0]);
 
-  loc = glGetUniformLocation(AH5_RndProgId, "LightPos");
+  loc = glGetUniformLocation(prg, "LightPos");
   if (loc != -1)
     glUniform3fv(loc, 1, &AH5_RndLightPos.X);
-  loc = glGetUniformLocation(AH5_RndProgId, "LightColor");
+  loc = glGetUniformLocation(prg, "LightColor");
   if (loc != -1)
     glUniform3fv(loc, 1, &AH5_RndLightColor.X);
 
-  loc = glGetUniformLocation(AH5_RndProgId, "Time");
+  loc = glGetUniformLocation(prg, "Time");
   if (loc != -1)
     glUniform1f(loc, AH5_Anim.Time);
-  loc = glGetUniformLocation(AH5_RndProgId, "GTime");
+  loc = glGetUniformLocation(prg, "GTime");
   if (loc != -1)
     glUniform1f(loc, AH5_Anim.GlobalTime);
 
@@ -152,7 +155,7 @@ VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M )
 /* Primitive load function.
  * ARGUMENTS:
  *   - primitive pointer:
- *       ah5OBJ *Obj;
+ *       ah5OBJ3D *Obj;
  *   - model *.OBJ file name:
  *       CHAR *FileName;
  * RETURNS:
@@ -396,8 +399,8 @@ VOID AH5_RndPrimCreatePlane( ah5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
       p->N = Norm;
       p->P = VecAddVec(C,
         VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
-      p->P.Y += 1.5 * sin(j * 222.0) * cos(i * 200.0);
-      p->C = Vec4Set(2, 6, 2, 1);
+      //p->P.Y += 2 * sin(j * 13.0) * cos(i * 13.0);
+      p->C = Vec4Set(0.18, 0.30, 0.08, 1);
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 
@@ -416,6 +419,5 @@ VOID AH5_RndPrimCreatePlane( ah5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
 
   free(V);
 } /* Ens of 'AH5_RndPrimCreatePlane' function */
-
 
 /* END OF 'PRIM.C' FILE */

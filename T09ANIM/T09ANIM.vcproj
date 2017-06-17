@@ -190,6 +190,10 @@
 				Name="Rendering System"
 				>
 				<File
+					RelativePath=".\MATERIAL.C"
+					>
+				</File>
+				<File
 					RelativePath=".\OBJ.C"
 					>
 				</File>
