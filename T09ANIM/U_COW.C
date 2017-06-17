@@ -53,9 +53,9 @@ static VOID AH5_UnitClose( ah5UNIT_COW *Uni, ah5ANIM *Ani )
  */
 static VOID AH5_UnitResponse( ah5UNIT_COW *Uni, ah5ANIM *Ani )
 {
-  if (Ani->KeysClick['W'])
+  if (Ani->KeysClick['E'])
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  else if (Ani->KeysClick['Q'])
+  else if (Ani->KeysClick['R'])
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 } /* End of 'AH5_UnitResponse' function */
 

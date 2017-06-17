@@ -396,8 +396,8 @@ VOID AH5_RndPrimCreatePlane( ah5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
       p->N = Norm;
       p->P = VecAddVec(C,
         VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
-      p->P.Y += 3 * sin(j * 40.0) * cos(i * 28.0);
-      p->C = Vec4Set(0.18, 0.30, 0.08, 1);
+      p->P.Y += 1.5 * sin(j * 222.0) * cos(i * 200.0);
+      p->C = Vec4Set(2, 6, 2, 1);
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }
 

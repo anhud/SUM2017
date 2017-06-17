@@ -16,7 +16,7 @@ typedef struct tagUNIT_CONTROL
   AH5_UNIT_BASE_FIELDS;
 } ah5UNIT_CONTROL;
 
-DBL px = 0, py = 0, pz = 0, rt = PI / 2;
+FLT px = 0, py = 0, pz = 0, rt = PI / 2;
 /* Control unit initialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
@@ -51,20 +51,41 @@ static VOID AH5_UnitClose( ah5UNIT_CONTROL *Uni, ah5ANIM *Ani )
  */
 static VOID AH5_UnitResponse( ah5UNIT_CONTROL *Uni, ah5ANIM *Ani )
 {
+  if (py > 0)
+    py -= 0.1;
+
   if (Ani->KeysClick[VK_ESCAPE])
     AH5_AnimClose();
   else if (Ani->KeysClick['F'])
     AH5_AnimFlipFullScreen();
   else if (Ani->KeysClick['P'])
     AH5_Anim.IsPause = !AH5_Anim.IsPause;
-  else if (Ani->Jy != 0)
+  if (Ani->Keys['W'])
   {
-    px += Ani->Jy * cos(rt);
-    pz += Ani->Jy * sin(rt);
-    rt += Ani->Jr / 5;
+    px += 0.8 * cos(rt);
+    pz += 0.8 * sin(rt);
   }
+  if (Ani->Keys['A'])
+  {
+    px += 0.5 * sin(rt);
+    pz -= 0.5 * cos(rt);
+  }
+  if (Ani->Keys['S'])
+  {
+    px -= 0.8 * cos(rt);
+    pz -= 0.8 * sin(rt);
+  }
+  if (Ani->Keys['D'])
+  {
+    px -= 0.5 * sin(rt);
+    pz += 0.5 * cos(rt);
+  }
+  if (Ani->Mdx != 0)
+    rt += Ani->Mdx / 45.0;
+  else if (Ani->KeysClick[VK_SPACE])
+    py += 2.0;
 
-    AH5_RndMatrView = MatrView(VecSet(px, AH5_Anim.Mz / 60.0, pz), VecSet1(0), VecSet(px + cos(rt), 1, pz + sin(rt)));
+    AH5_RndMatrView = MatrView(VecSet(px, py, pz), VecSet(px + cos(rt), py, pz + sin(rt)), VecSet(0, 1, 0));
 } /* End of 'AH5_UnitResponse' function */
 
 /* Control unit render function.

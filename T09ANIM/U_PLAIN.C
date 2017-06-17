@@ -27,7 +27,7 @@ typedef struct tagUNIT_PLAIN
  */
 static VOID AH5_UnitInit( ah5UNIT_PLAIN *Uni, ah5ANIM *Ani )
 {
-  AH5_RndPrimCreatePlane( &Uni->Plain, VecSet(-150, 0, -150), VecSet(300, 0, 0), VecSet(0, 0, 300), 50, 50);
+  AH5_RndPrimCreatePlane( &Uni->Plain, VecSet(-1500, 0, -1500), VecSet(3000, 0, 0), VecSet(0, 0, 3000), 500, 500);
 } /* End of 'AH5_UnitInit' function */
 
 /* Plain drawing unit deinitialization function.
