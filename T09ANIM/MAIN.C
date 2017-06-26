@@ -65,6 +65,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   AH5_AnimAddUnit(AH5_UnitCreateCow());
   AH5_AnimAddUnit(AH5_UnitCreateOwl());
   AH5_AnimAddUnit(AH5_UnitCreatePlain());
+  AH5_AnimAddUnit(AH5_UnitCreateDesk());
 
   while (GetMessage(&msg, NULL, 0, 0))
   {

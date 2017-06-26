@@ -24,6 +24,7 @@
  *       INT NumOfI;
  * RETURNS: None.
  */
+
 VOID AH5_RndPrimCreate( ah5PRIM *Pr, BOOL IsTrimesh,
                         ah5VERTEX *V, INT NumOfV,
                         INT *I, INT NumOfI )
@@ -121,7 +122,6 @@ VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M )
   glPrimitiveRestartIndex(-1);
 
   prg = AH5_RndMaterialApply(Pr->MtlNo);
-  /// glUseProgram(AH5_RndProgId);
   loc = glGetUniformLocation(prg, "MatrWVP");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, WVP.M[0]);
@@ -399,7 +399,7 @@ VOID AH5_RndPrimCreatePlane( ah5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M )
       p->N = Norm;
       p->P = VecAddVec(C,
         VecAddVec(VecMulNum(Du, j / (M - 1.0)), VecMulNum(Dv, i / (N - 1.0))));
-      //p->P.Y += 2 * sin(j * 13.0) * cos(i * 13.0);
+      p->P.Y += 2 * sin(j * 13.0) * cos(i * 13.0);
       p->C = Vec4Set(0.18, 0.30, 0.08, 1);
       p->T = Vec2Set(j / (M - 1.0), i / (N - 1.0));
     }

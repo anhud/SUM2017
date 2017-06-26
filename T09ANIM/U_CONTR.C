@@ -16,7 +16,7 @@ typedef struct tagUNIT_CONTROL
   AH5_UNIT_BASE_FIELDS;
 } ah5UNIT_CONTROL;
 
-FLT px = 0, py = 0, pz = 0, rt = PI / 2;
+FLT px = 0, py = 0, pz = 0, rt = PI / 2, rty = PI / 2, acc = 0;
 /* Control unit initialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
@@ -82,10 +82,21 @@ static VOID AH5_UnitResponse( ah5UNIT_CONTROL *Uni, ah5ANIM *Ani )
   }
   if (Ani->Mdx != 0)
     rt += Ani->Mdx / 45.0;
-  else if (Ani->KeysClick[VK_SPACE])
-    py += 2.0;
+  if (Ani->Mdy != 0 && (rty - Ani->Mdy / 2000.0 > -PI / 2) && (rty - Ani->Mdy / 2000.0 < PI))
+    rty -= Ani->Mdy / 2000.0;
+  if (Ani->Keys[VK_SPACE] && py == 0)
+  {
+    acc = 1.1;
+  }
 
-    AH5_RndMatrView = MatrView(VecSet(px, py, pz), VecSet(px + cos(rt), py, pz + sin(rt)), VecSet(0, 1, 0));
+  if (py + acc >= 0)
+    py = py + acc;
+  else
+    py = 0;
+  if (py != 0)
+    acc = acc - 0.05;
+
+  AH5_RndMatrView = MatrView(VecSet(px, py, pz), VecSet(px + cos(rt), py - sin(rty + PI / 2) * 3, pz + sin(rt)), VecSet(0, 1, 0));
 } /* End of 'AH5_UnitResponse' function */
 
 /* Control unit render function.
@@ -107,7 +118,7 @@ static VOID AH5_UnitRender( ah5UNIT_CONTROL *Uni, ah5ANIM *Ani )
     len = sprintf(Buf, "FPS: %.5f, Units: %d, Wheel: %d, "
       "J: %.3f %.3f %.3f %.3f",
       Ani->FPS, Ani->NumOfUnits, Ani->Mz,
-      Ani->Jx, Ani->Jy, Ani->Jz, Ani->Jr);
+      Ani->Mdy, Ani->Jy, Ani->Jz, Ani->Jr);
 
     SetWindowText(AH5_Anim.hWnd, Buf);
     save_time = Ani->GlobalTime;

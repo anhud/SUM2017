@@ -30,7 +30,7 @@ INT AH5_RndNumOfShaders;
  */
 VOID AH5_RndObjCreate( ah5OBJ *Obj, INT NumOfP )
 {
-  memset(Obj, 0, sizeof(ah5PRIM));
+  memset(Obj, 0, sizeof(ah5OBJ));
   if ((Obj->P = malloc(sizeof(ah5PRIM) * NumOfP)) == NULL)
     return;
   memset(Obj->P, 0, sizeof(ah5PRIM) * NumOfP);
@@ -50,7 +50,7 @@ VOID AH5_RndObjFree( ah5OBJ *Obj )
   for (i = 0; i < Obj->NumOfP; i++)
     AH5_RndPrimFree(&Obj->P[i]);
   free(Obj->P);
-  memset(Obj, 0, sizeof(ah5PRIM));
+  memset(Obj, 0, sizeof(ah5OBJ));
 } /* Ens of 'AH5_RndObjFree' function */
 
 /* Draw object function.

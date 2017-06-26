@@ -47,6 +47,7 @@ VOID AH5_RndResInit( VOID )
   AH5_RndNumOfShaders = 0;
 
   AH5_RndShaderAdd("SHADERS\\DEFAULT");
+  strcpy(def_mtl.ShaderStr, "SHADERS\\DEFAULT");
   AH5_RndMaterialAdd(&def_mtl);
 } /* End of 'AH5_RndResInit' function */
 

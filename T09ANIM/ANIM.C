@@ -16,6 +16,7 @@
 
 ah5ANIM AH5_Anim;
 INT AH5_MouseWheel;
+FLT hght;
 
 static UINT64
   AH5_StartTime,  /* Start program time */
@@ -59,7 +60,6 @@ VOID AH5_AnimInit( HWND hWnd )
     ReleaseDC(AH5_Anim.hWnd, AH5_Anim.hDC);
     exit(0);
   }
-  AH5_RndProgId = AH5_RndShaderLoad("A");
   AH5_RndInit();
 
   QueryPerformanceFrequency(&t);
@@ -77,12 +77,12 @@ VOID AH5_AnimClose( VOID )
 {
   INT i;
 
-  AH5_RndShaderFree(AH5_RndProgId);
   for(i = 0; i < AH5_Anim.NumOfUnits; i++)
   {
     AH5_Anim.Units[i]->Close(AH5_Anim.Units[i], &AH5_Anim);
     free(AH5_Anim.Units[i]);
   }
+  AH5_RndClose();
 
   /* Delete OpenGL data */
   wglMakeCurrent(NULL, NULL);
@@ -203,8 +203,11 @@ VOID AH5_AnimRender( VOID )
     /*** Update shader ***/
   if (AH5_Anim.GlobalTime - ShdTime > 2)
   {
-    AH5_RndShaderFree(AH5_RndProgId);
-    AH5_RndProgId = AH5_RndShaderLoad("A");
+    for (i = 0; i < AH5_RndNumOfShaders; i++)
+    {
+      AH5_RndShaderFree(AH5_RndShaders[i].ProgId);
+      AH5_RndShaders[i].ProgId = AH5_RndShaderLoad(AH5_RndShaders[i].Name);
+    }
     ShdTime = AH5_Anim.GlobalTime;
   }
 

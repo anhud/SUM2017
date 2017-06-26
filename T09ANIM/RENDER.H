@@ -27,10 +27,9 @@ extern MATR
   AH5_RndMatrView,
   AH5_RndMatrProj;
 
- extern VEC
+extern VEC
   AH5_RndLightPos,
   AH5_RndLightColor;
-
 
  typedef struct tagah5SHADER
 {
@@ -84,6 +83,9 @@ VOID AH5_RndInit( VOID );
  * ARGUMENTS: None.
  * RETURNS: None.
  */
+
+VOID AH5_RndClose( VOID );
+
 VOID AH5_RndSetProj( VOID );
 
 /***
@@ -142,31 +144,16 @@ VOID AH5_RndObjFree( ah5OBJ *Obj );
  */
 
 VOID AH5_RndObjCreate( ah5OBJ *Obj, INT NumOfP );
-
 VOID AH5_RndObjDraw( ah5OBJ *Obj, MATR M );
-
 VOID AH5_RndPrimCreate( ah5PRIM *Pr, BOOL IsTrimesh, ah5VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
-
 VOID AH5_RndPrimFree( ah5PRIM *Pr );
-
 VOID AH5_RndPrimDraw( ah5PRIM *Pr, MATR M );
-
 BOOL AH5_RndPrimLoad( ah5PRIM *Obj, CHAR *FileName );
-
 VOID AH5_RndTriMeshEvalNormals( ah5VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
-
 VOID AH5_RndGridEvalNormals( ah5VERTEX *V, INT N, INT M );
-
 VOID AH5_RndPrimCreateSphere( ah5PRIM *Pr, VEC C, FLT R, INT N, INT M );
-
 VOID AH5_RndPrimCreatePlane( ah5PRIM *Pr, VEC C, VEC Du, VEC Dv, INT N, INT M );
-
-/* CHAR * AH5_RndShaderLoadTextFile( CHAR *FileName );
-
-VOID AH5_RndShaderLog( CHAR *Stage, CHAR *Text );  */
-
 VOID AH5_RndShaderFree( UINT Prg );
-
 UINT AH5_RndShaderLoad( CHAR *FileNamePrefix );
 
 /* Resourcse initialization function.

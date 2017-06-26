@@ -24,10 +24,6 @@ VEC
   AH5_RndLightPos,
   AH5_RndLightColor;
 
-/* Current shader */
-UINT
-  AH5_RndProgId;    /* Shader program identifier */
-
 /* Rendering system initialization function.
  * ARGUMENTS: None.
  * RETURNS: None.
@@ -38,6 +34,7 @@ VOID AH5_RndInit( VOID )
   AH5_RndProjDist = 1;
   AH5_RndProjSize = 1;
 
+  AH5_RndResInit();
   AH5_RndMatrView = MatrView(VecSet(20, AH5_Anim.Mz / 60.0, 20), VecSet1(0), VecSet(0, 1, 0));
 
   AH5_RndLightPos = VecSet(2, -17, 2);
@@ -62,5 +59,10 @@ VOID AH5_RndSetProj( VOID )
 
   AH5_RndMatrProj = MatrFrustum(-rx, rx, -ry, ry, AH5_RndProjDist, AH5_RndProjFarClip);
 } /* End of 'AH5_RndSetProj' function */
+
+VOID AH5_RndClose( VOID )
+{
+  AH5_RndResClose();
+}
 
 /* END OF 'RENDER.C' FILE */

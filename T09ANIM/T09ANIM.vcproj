@@ -238,6 +238,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\U_DESK.C"
+					>
+				</File>
+				<File
 					RelativePath=".\U_OWL.C"
 					>
 				</File>

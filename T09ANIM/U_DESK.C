@@ -1,4 +1,4 @@
-/* FILE NAME: U_COW.C
+/* FILE NAME: U_DESK.C
  * PROGRAMMER: AH5
  * DATE: 10.06.2017
  * PURPOSE: Units base functions.
@@ -11,47 +11,47 @@
 #include "units.h"
 
 /* Animation unit representation type */
-typedef struct tagUNIT_COW
+typedef struct tagUNIT_DESK
 {
   AH5_UNIT_BASE_FIELDS;
-  ah5OBJ Cow; /* Cow model */
-} ah5UNIT_COW;
+  ah5OBJ Desk; /* Desk model */
+} ah5UNIT_DESK;
 
-/* Cow drawing unit initialization function.
+/* Desk drawing unit initialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
- *       ah5UNIT_COW *Uni;
+ *       ah5UNIT_DESK *Uni;
  *   - animation context:
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitInit( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitInit( ah5UNIT_DESK *Uni, ah5ANIM *Ani )
 {
-  AH5_RndObjLoad(&Uni->Cow, "cow.g3dm");
+  AH5_RndObjLoad(&Uni->Desk, "Ayer Writing Desk.obj");
 } /* End of 'AH5_UnitInit' function */
 
-/* Cow drawing unit deinitialization function.
+/* Desk drawing unit deinitialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
- *       ah5UNIT_COW *Uni;
+ *       ah5UNIT_DESK *Uni;
  *   - animation context:
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitClose( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitClose( ah5UNIT_DESK *Uni, ah5ANIM *Ani )
 {
-  AH5_RndObjFree(&Uni->Cow);
+  AH5_RndObjFree(&Uni->Desk);
 } /* End of 'AH5_UnitClose' function */
 
-/* Cow drawing unit inter frame events handle function.
+/* Desk drawing unit inter frame events handle function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
- *       ah5UNIT_COW *Uni;
+ *       ah5UNIT_DESK *Uni;
  *   - animation context:
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitResponse( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitResponse( ah5UNIT_DESK *Uni, ah5ANIM *Ani )
 {
   if (Ani->KeysClick['E'])
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -59,30 +59,30 @@ static VOID AH5_UnitResponse( ah5UNIT_COW *Uni, ah5ANIM *Ani )
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 } /* End of 'AH5_UnitResponse' function */
 
-/* Cow drawing unit render function.
+/* Desk drawing unit render function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
- *       ah5UNIT_COW *Uni;
+ *       ah5UNIT_DESK *Uni;
  *   - animation context:
  *       ah5ANIM *Ani;
  * RETURNS: None.
  */
-static VOID AH5_UnitRender( ah5UNIT_COW *Uni, ah5ANIM *Ani )
+static VOID AH5_UnitRender( ah5UNIT_DESK *Uni, ah5ANIM *Ani )
 {
-  AH5_RndObjDraw(&Uni->Cow, MatrMulMatr(MatrMulMatr(MatrRotateY(AH5_Anim.GlobalTime / 5.0), MatrRotateZ(fabs(cos(AH5_Anim.GlobalTime)))), MatrTranslate(VecSet(-30, 0, -10))));
+  AH5_RndObjDraw(&Uni->Desk, UnitMatrix);
 } /* End of 'AH5_UnitRender' function */
 
-/* Cow drawing unit creation function.
+/* Desk drawing unit creation function.
  * ARGUMENTS: None.
  * RETURNS:
  *   (ah5UNIT *) pointer to created unit.
  */
-ah5UNIT * AH5_UnitCreateCow( VOID )
+ah5UNIT * AH5_UnitCreateDesk( VOID )
 {
-  ah5UNIT_COW *Uni;
+  ah5UNIT_DESK *Uni;
 
   /* Memory allocation */
-  if ((Uni = (ah5UNIT_COW *)AH5_AnimUnitCreate(sizeof(ah5UNIT_COW))) == NULL)
+  if ((Uni = (ah5UNIT_DESK *)AH5_AnimUnitCreate(sizeof(ah5UNIT_DESK))) == NULL)
     return NULL;
   /* Setup unit methods */
   Uni->Init = (VOID *)AH5_UnitInit;
@@ -90,6 +90,6 @@ ah5UNIT * AH5_UnitCreateCow( VOID )
   Uni->Response = (VOID *)AH5_UnitResponse;
   Uni->Render = (VOID *)AH5_UnitRender;
   return (ah5UNIT *)Uni;
-} /* End of 'AH5_UnitCreateCow' function */
+} /* End of 'AH5_UnitCreateDesk' function */
 
-/* END OF 'U_COW.C' FILE */
+/* END OF 'U_DESK.C' FILE */
